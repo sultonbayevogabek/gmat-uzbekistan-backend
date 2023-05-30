@@ -1,36 +1,40 @@
-import { Sequelize, DataTypes } from 'sequelize'
+import {Sequelize, DataTypes} from 'sequelize'
+import config from "../config.js";
 
-const sequelize = new Sequelize()
-
-const User = sequelize.define('User', {
-      id: {
-         type: Sequelize.DataTypes.UUID,
-         defaultValue: Sequelize.DataTypes.UUIDV4,
-         primaryKey: true
-      },
-      name: {
-         type: Sequelize.DataTypes.STRING(64),
-         allowNull: false
-      },
-      phone: {
-         type: Sequelize.DataTypes.STRING(9),
-         allowNull: false
-      },
-      password: {
-         type: Sequelize.DataTypes.STRING(64),
-         allowNull: false
-      },
-      role: {
-         type: Sequelize.DataTypes.STRING(5),
-         isIn: [['user', 'admin']],
-         defaultValue: 'user'
-      },
-      avatar: {
-         type: Sequelize.DataTypes.STRING,
-         allowNull: false
-      }
+const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
+    logging: (...msg) => console.log(msg)
 })
 
-(async ()  => {
-   await sequelize.sync({ force: true })
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    name: {
+        type: DataTypes.STRING(64),
+        allowNull: false
+    },
+    phone: {
+        type: DataTypes.STRING(9),
+        is: /^998([378]{2}|(9[013-57-9]))\d{7}$/,
+        allowNull: false
+    },
+    password: {
+        type: DataTypes.STRING(64),
+        allowNull: false
+    },
+    role: {
+        type: DataTypes.STRING(5),
+        isIn: [['user', 'admin']],
+        defaultValue: 'user'
+    },
+    avatar: {
+        type: DataTypes.STRING(30),
+        allowNull: true
+    }
+});
+
+(async () => {
+    await sequelize.sync({ alter: true })
 })()
