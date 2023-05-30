@@ -1,5 +1,8 @@
-const UserModel = (Sequelize, sequelize) => {
-   return sequelize.define('users', {
+import { Sequelize, DataTypes } from 'sequelize'
+
+const sequelize = new Sequelize()
+
+const User = sequelize.define('User', {
       id: {
          type: Sequelize.DataTypes.UUID,
          defaultValue: Sequelize.DataTypes.UUIDV4,
@@ -26,6 +29,8 @@ const UserModel = (Sequelize, sequelize) => {
          type: Sequelize.DataTypes.STRING,
          allowNull: false
       }
-   })
-}
-export default UserModel
+})
+
+(async ()  => {
+   await sequelize.sync({ force: true })
+})()
