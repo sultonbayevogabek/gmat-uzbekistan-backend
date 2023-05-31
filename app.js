@@ -12,7 +12,7 @@ app.use(cors())
 readdir('routes', (err, files) => {
    files.forEach(async file => {
       const routing = (await import('./routes/' + file)).default
-      app.use(routing.route, routing.router)
+       app.use(routing.route, routing.router)
    })
 })
 

@@ -2,7 +2,7 @@ import {Sequelize, DataTypes} from 'sequelize'
 import config from "../config.js";
 
 const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
-    logging: (...msg) => console.log(msg + '')
+    logging: false
 })
 
 export const User = sequelize.define('User', {
@@ -13,20 +13,21 @@ export const User = sequelize.define('User', {
     },
     name: {
         type: DataTypes.STRING(32),
-        allowNull: false
+        allowNull: false,
     },
     phone: {
-        type: DataTypes.STRING(9),
+        type: DataTypes.STRING(12),
         is: /^998([378]{2}|(9[013-57-9]))\d{7}$/,
+        unique: true,
         allowNull: false
     },
     password: {
-        type: DataTypes.STRING(32),
+        type: DataTypes.STRING(64),
         allowNull: false
     },
     role: {
         type: DataTypes.STRING(5),
-        isIn: [['user', 'admin']],
+        isIn: [['user', 'premium-user', 'admin']],
         defaultValue: 'user'
     },
     avatar: {
@@ -35,12 +36,10 @@ export const User = sequelize.define('User', {
     },
     isDeleted: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
+        defaultValue: false
     }
 });
 
 (async () => {
-    await sequelize.sync({ alter: false })
+    await sequelize.sync({ force: false })
 })()
-
-export default { User }

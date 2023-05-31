@@ -1,41 +1,79 @@
-import { User } from '../models/models.js'
+import {User} from '../models/models.js'
+import {generateHash} from '../services/bcrypt.service.js'
+import {generateToken} from '../services/jwt.service.js'
 
-const SignUpController = async (req, res) => {
-   let { name, phone, password } = req.body
+export default async (req, res) => {
+    let {name, phone, password} = req.body
 
-   name = name?.trim()
-   phone = phone?.trim()
-   password = password?.trim()
+    name = name?.trim()
+    phone = phone?.trim()
+    password = password?.trim()
 
-   if (!name || name?.length < 3 || name?.length > 32) {
-      return res.status(400).send({
-         ok: false,
-         message: `Ism uzunligi 3 ta belgidan kam va 32 ta belgidan ko'p bo'lmasligi kerak`
-      })
-   }
+    const errors = []
 
-   if (!/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
-      return res.status(400).send({
-         ok: false,
-         message: `Telefon raqam formati noto'g'ri`
-      })
-   }
+    if (!name) {
+        errors.push('Name is required')
+    }
 
-   if (!password || password?.length < 6 || password?.length > 32) {
-      return res.status(400).send({
-         ok: false,
-         message: `Parol uzunligi 6 ta belgidan kam va 32 ta belgidan ko'p bo'lmasligi kerak`
-      })
-   }
+    if (name?.length < 3 || name?.length > 32) {
+        errors.push('Invalid name')
+    }
 
-   const user = await User.create({
-      name, phone, password
-   })
+    if (!phone) {
+        errors.push('Phone number is required')
+    }
 
-   return res.status(200).send({
-      ok: true,
-      message: `Yangi foydalanuvchi ro'yxatga olindi`
-   })
+    if (!/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
+        errors.push('Invalid phone number')
+    }
+
+    if (!password) {
+        errors.push('Password is required')
+    }
+
+    if (password?.length < 6 || password?.length > 32) {
+        errors.push('Invalid password')
+    }
+
+    if (errors.length) {
+        return res.status(400).send({
+            ok: false,
+            errors
+        })
+    }
+
+    let [user, created] = await User.findOrCreate({
+        where: {phone},
+        defaults: {
+            name,
+            phone,
+            password: await generateHash(password)
+        }
+    })
+
+    if (!created) {
+        let errors = []
+
+        if (user?.isDeleted) {
+            errors.push('User has been blocked by system')
+        }
+
+        if (!user?.isDeleted) {
+            errors.push('The phone number has been registered')
+        }
+
+        return res.status(400).send({
+            ok: false,
+            errors
+        })
+    }
+
+    delete user?.dataValues?.password
+
+    return res.status(200).send({
+        ok: true,
+        message: `New user was created successfully`,
+        user,
+        token: generateToken({ id: user.id })
+    })
 }
-
-export default SignUpController
