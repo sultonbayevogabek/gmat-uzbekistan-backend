@@ -2,17 +2,17 @@ import {Sequelize, DataTypes} from 'sequelize'
 import config from "../config.js";
 
 const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
-    logging: (...msg) => console.log(msg)
+    logging: (...msg) => console.log(msg + '')
 })
 
-const User = sequelize.define('User', {
+export const User = sequelize.define('User', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
     name: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(32),
         allowNull: false
     },
     phone: {
@@ -21,7 +21,7 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     password: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(32),
         allowNull: false
     },
     role: {
@@ -32,9 +32,15 @@ const User = sequelize.define('User', {
     avatar: {
         type: DataTypes.STRING(30),
         allowNull: true
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
     }
 });
 
 (async () => {
-    await sequelize.sync({ alter: true })
+    await sequelize.sync({ alter: false })
 })()
+
+export default { User }
