@@ -5,25 +5,6 @@ import {generateToken} from '../services/jwt.service.js'
 export default async (req, res) => {
     let { phone, password } = req.body
 
-    phone = phone?.trim()
-
-    const errors = []
-
-    if (!phone || !/^\+998[0-9]{9}$/.test(phone)) {
-        errors.push('Invalid phone number')
-    }
-
-    if (!password || password?.length < 6) {
-        errors.push('Invalid password')
-    }
-
-    if (errors.length) {
-        return res.status(400).send({
-            ok: false,
-            errors
-        })
-    }
-
     const user = await User.findOne({
         where: {
             phone
@@ -33,7 +14,7 @@ export default async (req, res) => {
     if (!user) {
         return res.status(404).send({
             ok: false,
-            errors: ['User not found']
+            error: 'User not found'
         })
     }
 
@@ -41,7 +22,7 @@ export default async (req, res) => {
         if (user.isDeleted) {
             return res.status(400).send({
                 ok: false,
-                errors: ['User has been blocked by system']
+                error: 'User has been blocked by system'
             })
         }
 
@@ -49,7 +30,7 @@ export default async (req, res) => {
         if (!isPasswordCorrect) {
             return res.status(400).send({
                 ok: false,
-                errors: ['Incorrect password']
+                error: 'Incorrect password'
             })
         }
 
