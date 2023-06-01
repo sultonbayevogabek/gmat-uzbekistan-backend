@@ -6,7 +6,6 @@ export default async (req, res) => {
     let { phone, password } = req.body
 
     phone = phone?.trim()
-    password = password?.trim()
 
     const errors = []
 

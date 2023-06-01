@@ -7,7 +7,6 @@ export default async (req, res) => {
 
     name = name?.trim()
     phone = phone?.trim()
-    password = password?.trim()
 
     const errors = []
 
