@@ -1,78 +1,78 @@
-import {User} from '../models/models.js'
-import {generateHash} from '../services/bcrypt.service.js'
-import {generateToken} from '../services/jwt.service.js'
+import { User } from '../models/models.js'
+import { generateHash } from '../services/bcrypt.service.js'
+import { generateToken } from '../services/jwt.service.js'
 
 export default async (req, res) => {
-    let {name, phone, password} = req.body
+   let { name, phone, password } = req.body
 
-    name = name?.trim()
-    phone = phone?.trim()
+   name = name?.trim()
+   phone = phone?.trim()
 
-    const errors = []
+   const errors = []
 
-    if (!name) {
-        errors.push('Name is required')
-    }
+   if (!name) {
+      errors.push('Name is required')
+   }
 
-    if (name?.length < 3 || name?.length > 32) {
-        errors.push('Invalid name')
-    }
+   if (name?.length < 3 || name?.length > 32) {
+      errors.push('Invalid name')
+   }
 
-    if (!phone) {
-        errors.push('Phone number is required')
-    }
+   if (!phone) {
+      errors.push('Phone number is required')
+   }
 
-    if (!/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
-        errors.push('Invalid phone number')
-    }
+   if (!/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
+      errors.push('Invalid phone number')
+   }
 
-    if (!password) {
-        errors.push('Password is required')
-    }
+   if (!password) {
+      errors.push('Password is required')
+   }
 
-    if (password?.length < 6 || password?.length > 32) {
-        errors.push('Invalid password')
-    }
+   if (password?.length < 6 || password?.length > 32) {
+      errors.push('Invalid password')
+   }
 
-    if (errors.length) {
-        return res.status(400).send({
-            ok: false,
-            errors
-        })
-    }
+   if (errors.length) {
+      return res.status(400).send({
+         ok: false,
+         errors
+      })
+   }
 
-    let [user, created] = await User.findOrCreate({
-        where: {phone},
-        defaults: {
-            name,
-            phone,
-            password: await generateHash(password)
-        }
-    })
+   let [user, created] = await User.findOrCreate({
+      where: { phone },
+      defaults: {
+         name,
+         phone,
+         password: await generateHash(password)
+      }
+   })
 
-    if (!created) {
-        let errors = []
+   if (!created) {
+      let errors = []
 
-        if (user?.isDeleted) {
-            errors.push('User has been blocked by system')
-        }
+      if (user?.isDeleted) {
+         errors.push('User has been blocked by system')
+      }
 
-        if (!user?.isDeleted) {
-            errors.push('The phone number has been registered')
-        }
+      if (!user?.isDeleted) {
+         errors.push('The phone number has been registered')
+      }
 
-        return res.status(400).send({
-            ok: false,
-            errors
-        })
-    }
+      return res.status(400).send({
+         ok: false,
+         errors
+      })
+   }
 
-    delete user?.dataValues?.password
+   delete user?.dataValues?.password
 
-    return res.status(200).send({
-        ok: true,
-        message: `New user was created successfully`,
-        user,
-        token: generateToken({ id: user.id })
-    })
+   return res.status(200).send({
+      ok: true,
+      message: `New user was created successfully`,
+      user,
+      token: generateToken({ id: user.id })
+   })
 }
