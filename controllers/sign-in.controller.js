@@ -10,7 +10,7 @@ export default async (req, res) => {
 
     const errors = []
 
-    if (!phone || phone?.length !== 12) {
+    if (!phone || !/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
         errors.push('Invalid phone number')
     }
 
