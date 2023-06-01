@@ -9,7 +9,7 @@ export default async (req, res) => {
 
     const errors = []
 
-    if (!phone || !/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
+    if (!phone || !/^\+998[0-9]{9}$/.test(phone)) {
         errors.push('Invalid phone number')
     }
 

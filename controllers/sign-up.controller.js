@@ -22,7 +22,7 @@ export default async (req, res) => {
       errors.push('Phone number is required')
    }
 
-   if (!/^998([378]{2}|(9[013-57-9]))\d{7}$/.test(phone)) {
+   if (!/^\+998[0-9]{9}$/.test(phone)) {
       errors.push('Invalid phone number')
    }
 
