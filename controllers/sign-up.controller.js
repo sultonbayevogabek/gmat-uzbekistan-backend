@@ -58,7 +58,7 @@ export default async (req, res) => {
       }
 
       if (!user?.isDeleted) {
-         errors.push('The phone number has been registered')
+         errors.push('The phone number has already been registered')
       }
 
       return res.status(400).send({

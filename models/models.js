@@ -16,7 +16,7 @@ export const User = sequelize.define('User', {
         allowNull: false,
     },
     phone: {
-        type: DataTypes.STRING(12),
+        type: DataTypes.STRING(13),
         is: /^\+998[0-9]{9}$/,
         unique: true,
         allowNull: false
@@ -41,5 +41,5 @@ export const User = sequelize.define('User', {
 });
 
 (async () => {
-    await sequelize.sync({ force: true })
+    await sequelize.sync({ force: false })
 })()
