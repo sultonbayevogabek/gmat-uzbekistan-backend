@@ -40,7 +40,7 @@ export default async (req, res) => {
             ok: true,
             message: `Login was successfully performed`,
             user,
-            token: generateToken({ id: user.id })
+            token: generateToken({ userId: user.id })
         })
     }
 }

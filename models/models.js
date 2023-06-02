@@ -1,5 +1,6 @@
 import {Sequelize, DataTypes} from 'sequelize'
 import config from "../config.js";
+import { flatten } from 'express/lib/utils.js';
 
 const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
     logging: false

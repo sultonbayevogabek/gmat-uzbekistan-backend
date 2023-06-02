@@ -37,6 +37,6 @@ export default async (req, res) => {
       ok: true,
       message: `New user was created successfully`,
       user,
-      token: generateToken({ id: user.id })
+      token: generateToken({ userId: user.id })
    })
 }
