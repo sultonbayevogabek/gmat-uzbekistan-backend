@@ -12,6 +12,10 @@ export const User = sequelize.define('User', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
+    googleId: {
+        type: DataTypes.STRING(40),
+        allowNull: true
+    },
     name: {
         type: DataTypes.STRING(32),
         allowNull: false,
@@ -20,11 +24,17 @@ export const User = sequelize.define('User', {
         type: DataTypes.STRING(13),
         is: /^\+998[0-9]{9}$/,
         unique: true,
-        allowNull: false
+        allowNull: true
+    },
+    email: {
+        type: DataTypes.STRING(64),
+        isEmail: true,
+        unique: true,
+        allowNull: true
     },
     password: {
         type: DataTypes.STRING(64),
-        allowNull: false
+        allowNull: true
     },
     role: {
         type: DataTypes.STRING(5),
@@ -32,7 +42,7 @@ export const User = sequelize.define('User', {
         defaultValue: 'user'
     },
     avatar: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(128),
         allowNull: true
     },
     isDeleted: {
@@ -42,5 +52,5 @@ export const User = sequelize.define('User', {
 });
 
 (async () => {
-    await sequelize.sync({ force: false })
+    await sequelize.sync({ force: true })
 })()
