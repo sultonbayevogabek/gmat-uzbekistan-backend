@@ -10,6 +10,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
+
 app.use(RequestMiddleware)
 readdir('routes', (err, files) => {
    files.forEach(async file => {
