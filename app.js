@@ -5,7 +5,6 @@ import cors from 'cors'
 import RequestMiddleware from './middlewares/request.middleware.js';
 const app = express()
 
-
 app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
