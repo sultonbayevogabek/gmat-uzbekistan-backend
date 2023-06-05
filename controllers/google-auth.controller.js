@@ -19,11 +19,10 @@ export default async (req, res) => {
       })
    }
 
-   const { envelope: { kid }, payload: { email, name, picture } } = ticket
+   const { payload: { email, name, picture } } = ticket
    const [ user, created ] = await User.findOrCreate({
-      where: { googleId: kid },
+      where: { email },
       defaults: {
-         googleId: kid,
          name,
          email,
          avatar: picture
