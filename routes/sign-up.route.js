@@ -1,8 +1,8 @@
-import { Router } from 'express'
+import { Router } from 'express';
 import SignUpController from '../controllers/sign-up.controller.js';
-import SignUpValidator from "../validators/sign-up.validator.js";
+import SignUpValidator from '../validators/sign-up.validator.js';
 
-const router = Router()
-router.post('/', SignUpValidator, SignUpController)
+const router = Router();
+router.post('/', SignUpValidator, SignUpController);
 
-export default { route: '/sign-up', router }
+export default { route: '/sign-up', router };

@@ -1,7 +1,8 @@
-import { Router } from 'express'
-import GoogleAuthController from "../controllers/google-auth.controller.js";
+import { Router } from 'express';
+import GoogleAuthController from '../controllers/google-auth.controller.js';
+import GoogleAuthValidator from '../validators/google-auth.validator.js';
 
-const router = Router()
-router.post('/', GoogleAuthController)
+const router = Router();
+router.post('/', GoogleAuthValidator, GoogleAuthController);
 
-export default { route: '/google-auth', router }
+export default { route: '/google-auth', router };
