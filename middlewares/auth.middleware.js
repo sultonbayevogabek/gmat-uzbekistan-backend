@@ -1,25 +1,34 @@
 import { User } from '../models/models.js';
+import { JwtService } from '../services/jwt.service.js';
+
+const { verifyToken } = new JwtService()
 
 export default async (req, res, next) => {
-   if (!req.userId) {
+   const token = req.headers.token;
+
+   if (!token || !verifyToken(token)) {
       return res.status(401).send({
          ok: false,
          error: 'Not authorized'
       });
    }
 
-   const user = await User.findOne({
-      where: { id: req.userId, isDeleted: false }
-   });
+   if (token && verifyToken(token)) {
+      const { userId } = verifyToken(token);
 
-   if (!user) {
-      return res.status(401).send({
-         ok: false,
-         error: 'Not authorized'
+      const user = await User.findOne({
+         where: { id: userId, isDeleted: false }
       });
-   }
 
-   req.user = user;
+      if (!user) {
+         return res.status(401).send({
+            ok: false,
+            error: 'Not authorized'
+         });
+      }
+
+      req.user = user;
+   }
 
    next();
 }

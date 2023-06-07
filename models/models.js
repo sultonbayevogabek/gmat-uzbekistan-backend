@@ -47,5 +47,5 @@ export const User = sequelize.define('User', {
 });
 
 (async () => {
-   await sequelize.sync({ force: true });
+   await sequelize.sync({ force: false });
 })();

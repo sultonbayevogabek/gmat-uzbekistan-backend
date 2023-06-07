@@ -1,4 +1,10 @@
 import bcrypt from 'bcrypt';
 
-export const generateHash = async (data) => await bcrypt.hash(data, await bcrypt.genSalt(10));
-export const compareHash = async (data, hash) => await bcrypt.compare(data, hash);
+export class BcryptService {
+   async generateHash(data) {
+      return await bcrypt.hash(data, await bcrypt.genSalt(10));
+   }
+   async compareHash(data, hash) {
+      return await bcrypt.compare(data, hash);
+   }
+}
