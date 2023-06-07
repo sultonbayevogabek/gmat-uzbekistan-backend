@@ -5,12 +5,13 @@ import GoogleAuthValidator from '../validators/google-auth.validator.js';
 import { AuthController } from '../controllers/auth.controller.js';
 
 const router = Router();
-const { signIn, signUp, googleAuth } = new AuthController();
+const authController = new AuthController();
 
-router.post('/sign-in', SignInValidator, signIn);
+router.post('/sign-in', SignInValidator, (req, res) => authController.signIn(req, res));
 
-router.post('/sign-up', SignUpValidator, signUp);
+router.post('/sign-up', SignUpValidator, (req, res) => authController.signUp(req, res));
 
-router.post('/google-auth', GoogleAuthValidator, googleAuth)
+router.post('/google-auth', GoogleAuthValidator, (req, res) => authController.googleAuth(req, res));
 
 export default { route: '/', router };
+
