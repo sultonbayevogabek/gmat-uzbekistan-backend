@@ -5,6 +5,7 @@ const { verifyToken } = new JwtService()
 
 export default async (req, res, next) => {
    const token = req.headers.token;
+   console.log(token);
 
    if (!token || !verifyToken(token)) {
       return res.status(401).send({

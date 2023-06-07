@@ -1,20 +1,17 @@
 import AuthService from '../services/auth.service.js';
 
-
+const { signUp, signIn, googleAuth } = new AuthService();
 export class AuthController {
-   constructor() {
-      this.authService = new AuthService()
-   }
    async signUp(req, res) {
-     return await this.authService.signUp(req,res)
+     return await signUp(req,res)
    }
 
    async signIn(req, res) {
-      return this.authService.signIn(req,res)
+      return signIn(req,res)
    }
 
    async googleAuth(req, res) {
-    return this.authService.googleAuth(req,res)
+    return googleAuth(req,res)
    }
 
 }

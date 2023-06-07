@@ -33,7 +33,7 @@ export const User = sequelize.define('User', {
    },
    role: {
       type: DataTypes.STRING(5),
-      isIn: [['user', 'premium-user', 'admin']],
+      isIn: [ [ 'user', 'premium-user', 'admin' ] ],
       defaultValue: 'user'
    },
    avatar: {
