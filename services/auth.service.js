@@ -35,8 +35,6 @@ export default class AuthService {
          });
       }
 
-      delete user?.dataValues?.password;
-
       return res.status(200).send({
          ok: true, message: `New user was created successfully`, user, token: generateToken({ userId: user.id })
       });
@@ -71,8 +69,6 @@ export default class AuthService {
             });
          }
 
-         delete user?.dataValues?.password;
-
          return res.status(200).send({
             ok: true, message: `Login was successfully performed`, user, token: generateToken({ userId: user.id })
          });
@@ -102,8 +98,6 @@ export default class AuthService {
             ok: false, error: 'User has been blocked by system'
          });
       }
-
-      delete user?.dataValues?.password;
 
       return res.status(200).send({
          ok: true, user, token: generateToken({ userId: user?.id }), message: 'Google auth was successfully performed'

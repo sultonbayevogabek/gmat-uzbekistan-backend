@@ -2,8 +2,7 @@ import Joi from 'joi';
 
 const schema = Joi.object({
    currentPassword: Joi
-      .string()
-      .required(),
+      .string(),
    newPassword: Joi
       .string()
       .min(6)
