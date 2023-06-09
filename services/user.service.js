@@ -13,17 +13,17 @@ export default class UserService {
          ok: true,
          message: `Password changed`
       });
-   }
+   };
 
-   getUser = async(req, res) => {
+   getUser = async (req, res) => {
       return res.status(200).send({
          ok: true,
          user: req.user
       });
-   }
+   };
 
    changePassword = async (req, res) => {
-      let { currentPassword, newPassword } = req.body;
+      const { currentPassword, newPassword } = req.body;
 
       if (req.user?.email && !req.user?.password) {
          await this.updatePassword(req, res, newPassword);
@@ -40,5 +40,29 @@ export default class UserService {
       }
 
       await this.updatePassword(req, res, newPassword);
-   }
+   };
+
+   updateCredentials = async (req, res) => {
+      const { name, phone } = req.body;
+
+      const user = await User.findOne({
+         where: { phone }
+      });
+
+      if (user && req.user?.id !== user?.id) {
+         return res.status(400).send({
+            ok: false,
+            error: 'This phone number belongs to another user'
+         });
+      }
+
+      await User.update({
+         name, phone
+      }, { where: { id: req.user.id } })
+
+      return res.status(200).send({
+         ok: true,
+         message: 'User credentials successfully updated'
+      })
+   };
 }

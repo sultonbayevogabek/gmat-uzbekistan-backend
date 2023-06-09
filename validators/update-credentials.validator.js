@@ -9,10 +9,7 @@ const schema = Joi.object({
    phone: Joi.string()
       .required()
       .trim()
-      .pattern(new RegExp(/^\+998[0-9]{9}$/)),
-   password: Joi.string()
-      .required()
-      .min(6)
+      .pattern(new RegExp(/^\+998[0-9]{9}$/))
 });
 
 export default async (req, res, next) => {

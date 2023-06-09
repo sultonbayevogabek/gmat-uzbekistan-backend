@@ -1,6 +1,6 @@
 import UserService from '../services/user.service.js';
 
-const { getUser, changePassword } = new UserService();
+const { getUser, changePassword, updateCredentials } = new UserService();
 
 export class UserController {
    async getUser(req, res) {
@@ -9,5 +9,9 @@ export class UserController {
 
    async changePassword(req, res) {
       return changePassword(req, res);
+   }
+
+   async updateCredentials(req, res) {
+      return updateCredentials(req, res);
    }
 }
