@@ -69,7 +69,6 @@ export default class UserService {
 
     uploadAvatar = async (req, res) => {
         const avatar = req.files?.avatar;
-        console.log(avatar);
 
         if (avatar?.size > 3145728 || ![ 'image/jpeg', 'image/png', 'image/jpg' ].includes(avatar?.mimetype)) {
             return res.status(400).send({
@@ -83,7 +82,6 @@ export default class UserService {
         const user = await User.update({
             avatar: `avatars/${ avatar.md5 }.${ avatar.mimetype.split('/')[1] }`
         }, { where: { id: req.user.id } });
-        console.log('User', user.avatar);
 
         return res.status(200).send({
             ok: true,

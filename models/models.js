@@ -32,7 +32,7 @@ export const User = sequelize.define('User', {
       allowNull: true
    },
    role: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.STRING(12),
       isIn: [ [ 'user', 'premium-user', 'admin' ] ],
       defaultValue: 'user'
    },
@@ -47,5 +47,5 @@ export const User = sequelize.define('User', {
 });
 
 (async () => {
-   await sequelize.sync({ force: false });
+   await sequelize.sync({ alter: true });
 })();

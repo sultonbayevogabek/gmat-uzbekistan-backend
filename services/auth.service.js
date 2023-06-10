@@ -13,7 +13,7 @@ export default class AuthService {
    async signUp(req, res) {
       let { name, phone, password } = req.body;
 
-      let [user, created] = await User.findOrCreate({
+      let [ user, created ] = await User.findOrCreate({
          where: { phone }, defaults: {
             name, phone, password: await generateHash(password)
          }
@@ -36,7 +36,9 @@ export default class AuthService {
       }
 
       return res.status(200).send({
-         ok: true, message: `New user was created successfully`, user, token: generateToken({ userId: user.id })
+         ok: true,
+         message: `New user was created successfully`,
+         token: generateToken({ userId: user.id })
       });
    }
 
@@ -70,7 +72,9 @@ export default class AuthService {
          }
 
          return res.status(200).send({
-            ok: true, message: `Login was successfully performed`, user, token: generateToken({ userId: user.id })
+            ok: true,
+            message: `Login was successfully performed`,
+            token: generateToken({ userId: user.id })
          });
       }
    }
@@ -86,10 +90,15 @@ export default class AuthService {
          });
       }
 
+      const adminEmails = ['sultonbayevogabek@gmail.com']
+
       const { payload: { email, name, picture } } = ticket;
-      const [user, created] = await User.findOrCreate({
+      const [ user, created ] = await User.findOrCreate({
          where: { email }, defaults: {
-            name, email, avatar: picture
+            name,
+            email,
+            avatar: picture,
+            role: adminEmails.includes(email) ? 'admin' : 'user'
          }
       });
 
@@ -100,7 +109,7 @@ export default class AuthService {
       }
 
       return res.status(200).send({
-         ok: true, user, token: generateToken({ userId: user?.id }), message: 'Google auth was successfully performed'
+         ok: true, token: generateToken({ userId: user?.id }), message: 'Google auth was successfully performed'
       });
    }
 }
