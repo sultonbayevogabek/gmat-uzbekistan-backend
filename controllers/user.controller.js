@@ -1,6 +1,6 @@
 import UserService from '../services/user.service.js';
 
-const { getUser, changePassword, updateCredentials, uploadAvatar } = new UserService();
+const { getUser, changePassword, updateCredentials, uploadAvatar, uploadScreenshot, deleteScreenshot, getScreenshots } = new UserService();
 
 export class UserController {
    async getUser(req, res) {
@@ -17,5 +17,17 @@ export class UserController {
 
    async uploadAvatar(req, res) {
       return uploadAvatar(req, res);
+   }
+
+   async uploadScreenshot(req, res) {
+      return uploadScreenshot(req, res);
+   }
+
+   async deleteScreenshot(req, res) {
+      return deleteScreenshot(req, res);
+   }
+
+   async getScreenshots(req, res) {
+      return getScreenshots(req, res);
    }
 }

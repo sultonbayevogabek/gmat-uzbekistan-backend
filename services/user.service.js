@@ -1,6 +1,7 @@
-import { User } from '../models/models.js';
+import { User, Payment } from '../models/models.js';
 import { BcryptService } from './bcrypt.service.js';
 import { join } from 'path';
+import { unlink } from 'fs/promises';
 
 const { generateHash, compareHash } = new BcryptService();
 
@@ -86,6 +87,74 @@ export default class UserService {
         return res.status(200).send({
             ok: true,
             message: 'Avatar updated successfully'
+        });
+    };
+
+    uploadScreenshot = async (req, res) => {
+        const hasScreenshot = await Payment.findOne({
+            where: { paymentUserId: req?.user?.id }
+        });
+
+        if (hasScreenshot) {
+            return res.status(400).send({
+                ok: false,
+                message: 'User can upload only one screenshot file'
+            });
+        }
+
+        const screenshot = req.files?.screenshot;
+
+        if (screenshot?.size > 3145728 || ![ 'image/jpeg', 'image/png', 'image/jpg' ].includes(screenshot?.mimetype)) {
+            return res.status(400).send({
+                ok: false,
+                message: 'Screenshot must .jpeg or .png and size less than 3 mb'
+            });
+        }
+
+        await screenshot.mv(join('public', 'screenshots', `${ screenshot.md5 }.${ screenshot.mimetype.split('/')[1] }`));
+
+        const payment = await Payment.create({
+            paymentUserId: req.user.id,
+            paymentScreenshot: `screenshots/${ screenshot.md5 }.${ screenshot.mimetype.split('/')[1] }`
+        });
+
+        return res.status(200).send({
+            ok: true,
+            message: 'Screenshot file uploaded'
+        });
+    };
+
+    deleteScreenshot = async (req, res) => {
+        const id = req?.body?.id;
+
+        const screenshot = await Payment.findOne({
+            where: { id }
+        });
+
+        if (!screenshot || screenshot?.paymentUserId !== req.body?.user?.id) {
+            return res.status(400).send({
+                ok: false,
+                message: 'You can not delete screenshot'
+            });
+        }
+
+        await unlink(screenshot?.paymentScreenshot);
+        await Payment.destroy({ where: { id: screenshot?.id } });
+
+        return res.status(200).send({
+            ok: true,
+            message: 'Screenshot deleted'
+        });
+    };
+
+    getScreenshots = async (req, res) => {
+        const screenshots = await Payment.findAll({
+            where: { paymentUserId: req?.user?.id }
+        });
+
+        return res.status(200).send({
+            ok: true,
+            screenshots
         });
     };
 }
