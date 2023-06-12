@@ -2,10 +2,10 @@ import { Sequelize, DataTypes } from 'sequelize';
 import config from '../config.js';
 
 const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
-    logging: (...msg) => console.log(msg)
+    logging: false
 });
 
-export const User = sequelize.define('User', {
+export const User = sequelize.define('user', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -46,7 +46,7 @@ export const User = sequelize.define('User', {
     }
 });
 
-export const Payment = sequelize.define('Payment', {
+export const Payment = sequelize.define('payment', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -60,6 +60,10 @@ export const Payment = sequelize.define('Payment', {
     paymentScreenshot: {
         type: DataTypes.STRING(128),
         allowNull: false
+    },
+    seenTime: {
+        type: DataTypes.DATE,
+        allowNull: true
     }
 });
 

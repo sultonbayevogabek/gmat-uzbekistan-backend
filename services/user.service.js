@@ -131,14 +131,14 @@ export default class UserService {
             where: { id }
         });
 
-        if (!screenshot || screenshot?.paymentUserId !== req.body?.user?.id) {
+        if (!screenshot || screenshot?.paymentUserId !== req?.user?.id) {
             return res.status(400).send({
                 ok: false,
                 message: 'You can not delete screenshot'
             });
         }
 
-        await unlink(screenshot?.paymentScreenshot);
+        await unlink(join('public', screenshot?.paymentScreenshot));
         await Payment.destroy({ where: { id: screenshot?.id } });
 
         return res.status(200).send({

@@ -1,11 +1,12 @@
-import { User } from '../models/models.js';
+import { User, Payment } from '../models/models.js';
 
 export default class AdminService {
    getAllUsers = async (req, res) => {
       const { count, rows: users } = await User.findAndCountAll(
          {
             where: { isDeleted: false },
-            order: [ [ 'updatedAt', 'DESC' ] ]
+            order: [ [ 'updatedAt', 'DESC' ] ],
+            include: [Payment]
          });
 
       return res.status(200).send({
