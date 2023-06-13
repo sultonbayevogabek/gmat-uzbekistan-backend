@@ -49,4 +49,15 @@ export default class AdminService {
          message: 'Role changed'
       })
    };
+
+   setScreenshotAsSeen = async (req, res) => {
+      await Payment.update({
+         seenTime: new Date()
+      }, { where: { id: req?.body?.id }})
+
+      return res.status(200).send({
+         ok: true,
+         message: 'Screenshot set as seen'
+      })
+   }
 }
