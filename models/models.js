@@ -67,6 +67,27 @@ export const Payment = sequelize.define('payment', {
     }
 });
 
+export const Lesson = sequelize.define('lesson', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    title: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        foreignKey: true
+    },
+    description: {
+        type: DataTypes.STRING(128),
+        allowNull: false
+    },
+    seenTime: {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
+});
+
 User.hasMany(Payment, { foreignKey: 'paymentUserId' });
 Payment.belongsTo(User, { foreignKey: 'paymentUserId' });
 

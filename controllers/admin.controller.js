@@ -1,6 +1,6 @@
 import AdminService from '../services/admin.service.js';
 
-const { getAllUsers, deleteUser, changeRole, setScreenshotAsSeen } = new AdminService();
+const { getAllUsers, deleteUser, changeRole, setScreenshotAsSeen, createLesson } = new AdminService();
 
 export class AdminController {
    async getAllUsers(req, res) {
@@ -17,5 +17,9 @@ export class AdminController {
 
    async setScreenshotAsSeen(req, res) {
       return setScreenshotAsSeen(req, res);
+   }
+
+   async createLesson(req, res) {
+      return createLesson(req, res);
    }
 }
