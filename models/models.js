@@ -79,11 +79,24 @@ export const Lesson = sequelize.define('lesson', {
         foreignKey: true
     },
     description: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(256),
         allowNull: false
     },
-    seenTime: {
-        type: DataTypes.DATE,
+    duration: {
+        type: DataTypes.STRING(16),
+        allowNull: false,
+        default:""
+    },
+    videoId: {
+        type: DataTypes.STRING(16),
+        allowNull: false
+    },
+    unit: {
+        type: DataTypes.STRING(16),
+        allowNull: false
+    },
+    pdfFiles: {
+        type: DataTypes.ARRAY(DataTypes.STRING(64)),
         allowNull: true
     }
 });
@@ -91,7 +104,11 @@ export const Lesson = sequelize.define('lesson', {
 User.hasMany(Payment, { foreignKey: 'paymentUserId' });
 Payment.belongsTo(User, { foreignKey: 'paymentUserId' });
 
+const lesson = await Lesson.findAll();
+console.log(lesson);
+
 
 (async () => {
+
     await sequelize.sync({ alter: true });
 })();
