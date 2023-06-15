@@ -84,7 +84,7 @@ export default class AdminService {
         }
 
         await Lesson.create({
-            title, duration, unit, videoId, description, pdfFiles
+            title, duration, unit, videoId, description, pdfFiles, views: 0
         });
 
         return res.status(200).send({
@@ -131,23 +131,6 @@ export default class AdminService {
         return res.status(200).send({
             ok: true,
             message: 'Lesson successfully updated'
-        });
-    };
-
-    getLessons = async (req, res) => {
-        const attributes = ['id', 'title', 'duration', 'description', 'unit']
-
-        if (['admin', 'premium-user'].includes(req?.user?.role)) {
-            attributes.push('videoId', 'pdfFiles')
-        }
-        const { count, rows } = await Lesson.findAndCountAll({
-            attributes
-        });
-
-        return res.status(200).send({
-            ok: true,
-            lessons: rows,
-            count
         });
     };
 

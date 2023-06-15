@@ -33,6 +33,4 @@ router.post('/update-lesson', AuthMiddleware, AdminMiddleware, fileUpload(), Upd
 
 router.post('/delete-lesson', AuthMiddleware, AdminMiddleware, DeleteScreenshotValidator, deleteLesson);
 
-router.post('/get-lessons', AuthMiddleware, AdminMiddleware, getLessons);
-
 export default { route: '/', router };

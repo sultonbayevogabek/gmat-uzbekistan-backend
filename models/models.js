@@ -2,7 +2,7 @@ import { Sequelize, DataTypes } from 'sequelize';
 import config from '../config.js';
 
 const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
-    logging: false
+    logging: (...msg) => console.log(msg)
 });
 
 export const User = sequelize.define('user', {
@@ -85,7 +85,7 @@ export const Lesson = sequelize.define('lesson', {
     duration: {
         type: DataTypes.STRING(16),
         allowNull: false,
-        default:""
+        default: ''
     },
     videoId: {
         type: DataTypes.STRING(16),
@@ -98,17 +98,16 @@ export const Lesson = sequelize.define('lesson', {
     pdfFiles: {
         type: DataTypes.ARRAY(DataTypes.STRING(64)),
         allowNull: true
+    },
+    views: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 });
 
-User.hasMany(Payment, { foreignKey: 'paymentUserId' });
+User.hasOne(Payment, { foreignKey: 'paymentUserId' });
 Payment.belongsTo(User, { foreignKey: 'paymentUserId' });
 
-const lesson = await Lesson.findAll();
-console.log(lesson);
-
-
 (async () => {
-
     await sequelize.sync({ alter: true });
 })();

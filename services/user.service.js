@@ -1,7 +1,8 @@
-import { User, Payment } from '../models/models.js';
+import { User, Payment, Lesson } from '../models/models.js';
 import { BcryptService } from './bcrypt.service.js';
 import { join } from 'path';
 import { unlink } from 'fs/promises';
+import { Op } from 'sequelize';
 
 const { generateHash, compareHash } = new BcryptService();
 
@@ -155,6 +156,54 @@ export default class UserService {
         return res.status(200).send({
             ok: true,
             screenshots
+        });
+    };
+
+    getLessons = async (req, res) => {
+        const unit = req?.body?.unit;
+        const title = req?.body?.title;
+
+        const whereCondition = {};
+
+        if (unit !== 'all') {
+            whereCondition.unit = unit;
+        }
+
+        if (title) {
+            whereCondition.title = {
+                [Op.iLike]: '%' + title + '%'
+            };
+        }
+
+        const attributes = [ 'id', 'title', 'duration', 'description', 'unit', 'views' ];
+
+        if ([ 'admin', 'premium-user' ].includes(req?.user?.role)) {
+            attributes.push('videoId', 'pdfFiles');
+        }
+        const rows = await Lesson.findAll({
+            where: whereCondition,
+            attributes
+        });
+
+        return res.status(200).send({
+            ok: true,
+            lessons: rows,
+            count: 0
+        });
+    };
+
+    incrementViewsCount = async (req, res) => {
+        const { id } = req?.body;
+
+        const lesson = await Lesson.increment('views', {
+            by: 1,
+            where: { id }
+        });
+
+        return res.status(200).send({
+            ok: true,
+            message: 'View count incremented',
+            lesson
         });
     };
 }

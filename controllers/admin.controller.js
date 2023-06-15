@@ -7,8 +7,7 @@ const {
     setScreenshotAsSeen,
     createLesson,
     updateLesson,
-    deleteLesson,
-    getLessons
+    deleteLesson
 } = new AdminService();
 
 export class AdminController {
@@ -38,9 +37,5 @@ export class AdminController {
 
     async deleteLesson(req, res) {
         return deleteLesson(req, res);
-    }
-
-    async getLessons(req, res) {
-        return getLessons(req, res);
     }
 }
