@@ -178,7 +178,7 @@ export default class UserService {
         const attributes = [ 'id', 'title', 'duration', 'description', 'unit', 'views' ];
 
         if ([ 'admin', 'premium-user' ].includes(req?.user?.role)) {
-            attributes.push('videoId', 'pdfFiles');
+            attributes.push('videoId', 'pdfFiles', 'videoUrl');
         }
         const rows = await Lesson.findAll({
             where: whereCondition,

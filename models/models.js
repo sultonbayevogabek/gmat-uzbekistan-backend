@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import config from '../config.js';
 
-const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
-    logging: (...msg) => console.log(msg)
+export const sequelize = new Sequelize(config.DB_CONNECTION_STRING, {
+    logging: false
 });
 
 export const User = sequelize.define('user', {
@@ -102,7 +102,11 @@ export const Lesson = sequelize.define('lesson', {
     views: {
         type: DataTypes.INTEGER,
         allowNull: false
-    }
+    },
+    videoUrl: {
+        type: DataTypes.STRING(64),
+        allowNull: true
+    },
 });
 
 User.hasOne(Payment, { foreignKey: 'paymentUserId' });
