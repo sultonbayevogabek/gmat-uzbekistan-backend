@@ -9,7 +9,9 @@ const app = express();
 app.use(express.static(join('public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+    origin: 'http://146.190.56.37:4200'
+}));
 
 readdir('routes', (err, files) => {
     files.forEach(async file => {
