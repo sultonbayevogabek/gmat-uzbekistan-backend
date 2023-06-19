@@ -4,7 +4,7 @@ import ChangePasswordValidator from '../validators/change-password.validator.js'
 import AuthMiddleware from '../middlewares/auth.middleware.js';
 import { UserController } from '../controllers/user.controller.js';
 import UpdateCredentialsValidator from '../validators/update-credentials.validator.js';
-import DeleteScreenshotValidator from '../validators/delete-screenshot.validator.js';
+import IdValidator from '../validators/id.validator.js';
 
 const router = Router();
 const {
@@ -22,7 +22,7 @@ router.post('/upload-avatar', AuthMiddleware, fileUpload(), uploadAvatar);
 
 router.post('/upload-screenshot', AuthMiddleware, fileUpload(), uploadScreenshot);
 
-router.post('/delete-screenshot', AuthMiddleware, DeleteScreenshotValidator, deleteScreenshot);
+router.post('/delete-screenshot', AuthMiddleware, IdValidator, deleteScreenshot);
 
 router.post('/get-screenshots', AuthMiddleware, getScreenshots);
 
@@ -30,6 +30,6 @@ router.post('/get-user', AuthMiddleware, getUser);
 
 router.post('/get-lessons', AuthMiddleware, getLessons);
 
-router.post('/increment-views-count', AuthMiddleware, DeleteScreenshotValidator, incrementViewsCount);
+router.post('/increment-views-count', AuthMiddleware, IdValidator, incrementViewsCount);
 
 export default { route: '/', router };

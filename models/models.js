@@ -89,7 +89,7 @@ export const Lesson = sequelize.define('lesson', {
     },
     videoId: {
         type: DataTypes.STRING(16),
-        allowNull: false
+        allowNull: true
     },
     unit: {
         type: DataTypes.STRING(16),
