@@ -1,7 +1,6 @@
 import { User, Payment, Lesson } from '../models/models.js';
 import { join } from 'path';
 import { Op } from 'sequelize';
-import { sequelize } from '../models/models.js';
 
 export default class AdminService {
    getAllUsers = async (req, res) => {
@@ -90,7 +89,7 @@ export default class AdminService {
    };
 
    createLesson = async (req, res) => {
-      const { title, duration, unit, videoId, description } = req.body;
+      const { title, duration, unit, description } = req.body;
       const files = req?.files?.files;
       const video = req?.files?.video;
 
@@ -113,16 +112,12 @@ export default class AdminService {
 
       let videoUrl = null;
       if (video) {
-         console.log(video);
          await video.mv(join('public', 'videos', `${ video.md5 }.${ video.mimetype.split('/')[1] }`));
-         console.log(118);
          videoUrl = `videos/${ video.md5 }.${ video.mimetype.split('/')[1] }`;
-         console.log(videoUrl);
       }
-      console.log(videoUrl);
 
       await Lesson.create({
-         title, duration, unit, videoId, description, pdfFiles, views: 0, videoUrl
+         title, duration, unit, description, pdfFiles, views: 0, videoUrl
       });
 
       return res.status(200).send({
@@ -131,7 +126,7 @@ export default class AdminService {
    };
 
    updateLesson = async (req, res) => {
-      const { id, title, duration, unit, videoId, description } = req.body;
+      const { id, title, duration, unit, description } = req.body;
       const files = req?.files?.files;
       const video = req?.files?.video;
 
@@ -159,7 +154,7 @@ export default class AdminService {
       }
 
       const body = {
-         title, duration, unit, videoId, description
+         title, duration, unit, description
       };
 
       if (pdfFiles.length) {
@@ -169,8 +164,6 @@ export default class AdminService {
       if (videoUrl) {
          body.videoUrl = videoUrl;
       }
-
-      console.log(body);
 
       await Lesson.update(body, {
          where: {

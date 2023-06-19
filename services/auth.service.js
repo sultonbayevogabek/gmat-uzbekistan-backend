@@ -64,6 +64,12 @@ export default class AuthService {
                 });
             }
 
+            if (!user?.password) {
+                return res.status(400).send({
+                    ok: false, error: 'This user has not yet set up a password'
+                })
+            }
+
             const isPasswordCorrect = await compareHash(password, user?.password);
             if (!isPasswordCorrect) {
                 return res.status(400).send({
