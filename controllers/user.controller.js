@@ -40,6 +40,7 @@ export class UserController {
     async getLessons(req, res) {
         return getLessons(req, res);
     }
+
     async incrementViewsCount(req, res) {
         return incrementViewsCount(req, res);
     }

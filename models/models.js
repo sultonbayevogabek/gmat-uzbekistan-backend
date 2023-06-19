@@ -109,5 +109,5 @@ User.hasOne(Payment, { foreignKey: 'paymentUserId' });
 Payment.belongsTo(User, { foreignKey: 'paymentUserId' });
 
 (async () => {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: false });
 })();
