@@ -15,6 +15,11 @@ const schema = Joi.object({
         .trim()
         .max(16)
         .required(),
+    videoId: Joi
+        .string()
+        .trim()
+        .max(16)
+        .required(),
     description: Joi
         .string()
         .trim()

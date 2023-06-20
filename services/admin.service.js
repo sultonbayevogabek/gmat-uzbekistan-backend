@@ -89,9 +89,8 @@ export default class AdminService {
    };
 
    createLesson = async (req, res) => {
-      const { title, duration, unit, description } = req.body;
+      const { title, duration, unit, description, videoId } = req.body;
       const files = req?.files?.files;
-      const video = req?.files?.video;
 
       const pdfFiles = [];
       if (files) {
@@ -110,14 +109,8 @@ export default class AdminService {
          }
       }
 
-      let videoUrl = null;
-      if (video) {
-         await video.mv(join('public', 'videos', `${ video.md5 }.${ video.mimetype.split('/')[1] }`));
-         videoUrl = `videos/${ video.md5 }.${ video.mimetype.split('/')[1] }`;
-      }
-
       await Lesson.create({
-         title, duration, unit, description, pdfFiles, views: 0, videoUrl
+         title, duration, unit, description, pdfFiles, views: 0, videoId
       });
 
       return res.status(200).send({
@@ -126,9 +119,8 @@ export default class AdminService {
    };
 
    updateLesson = async (req, res) => {
-      const { id, title, duration, unit, description } = req.body;
+      const { id, title, duration, unit, description, videoId } = req.body;
       const files = req?.files?.files;
-      const video = req?.files?.video;
 
       const pdfFiles = [];
       if (files) {
@@ -147,22 +139,12 @@ export default class AdminService {
          }
       }
 
-      let videoUrl = null;
-      if (video) {
-         await video.mv(join('public', 'videos', `${ video.md5 }.${ video.mimetype.split('/')[1] }`));
-         videoUrl = `videos/${ video.md5 }.${ video.mimetype.split('/')[1] }`;
-      }
-
       const body = {
-         title, duration, unit, description
+         title, duration, unit, description, videoId
       };
 
       if (pdfFiles.length) {
          body.pdfFiles = pdfFiles;
-      }
-
-      if (videoUrl) {
-         body.videoUrl = videoUrl;
       }
 
       await Lesson.update(body, {

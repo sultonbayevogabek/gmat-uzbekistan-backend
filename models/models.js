@@ -89,7 +89,7 @@ export const Lesson = sequelize.define('lesson', {
     },
     videoId: {
         type: DataTypes.STRING(16),
-        allowNull: true
+        allowNull: false
     },
     unit: {
         type: DataTypes.STRING(16),
@@ -102,16 +102,12 @@ export const Lesson = sequelize.define('lesson', {
     views: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    videoUrl: {
-        type: DataTypes.STRING(64),
-        allowNull: true
-    },
+    }
 });
 
 User.hasOne(Payment, { foreignKey: 'paymentUserId' });
 Payment.belongsTo(User, { foreignKey: 'paymentUserId' });
 
 (async () => {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ force: false });
 })();
